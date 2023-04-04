@@ -35,7 +35,7 @@ public class AirportRepository {
             List<Integer> passengers  = ticketDb.get(flightId);
             for(int p : passengers){
                 if (p == passengerId){
-                    return "FAILURE";
+                    return "SUCCESS";
                 }
             }
 
@@ -58,17 +58,17 @@ public class AirportRepository {
     }
     public String cancelTicket(int flightId,int passengerId){
 
-        if(ticketDb.containsKey(flightId)){
+        if(ticketDb.containsKey(flightId)) {
             List<Integer> passengers = ticketDb.get(flightId);
-            if(passengers == null){
+            if (passengers == null) {
                 return "FAILURE";
             }
-                for (int p  : passengers){
-                    if( p == passengerId){
-                        passengers.remove(passengerId);
-                    }
+            for (int p : passengers) {
+                if (p == passengerId) {
+                    passengers.remove(passengerId);
                 }
-            ticketDb.put(flightId,passengers);
+            }
+            ticketDb.put(flightId, passengers);
             return "SUCCESS";
         }
         return "FAILURE";
@@ -129,22 +129,25 @@ public class AirportRepository {
         int cnt = 0;
         for(int flightid : ticketDb.keySet()){
             List<Integer>passengers = ticketDb.get(flightid);
-            if(passengers.contains(passengerId)){
-                cnt++;
+            for(int p : passengers){
+                if(p == passengerId){
+                    cnt++;
+                }
             }
         }
         return cnt;
     }
     public String getAirportName(int flightId){
-        String ans = null;
+        String ans = "";
         Flight flight = new Flight(flightId);
         for (Airport airport : airportDb.values()){
             if(flight.getFromCity().equals(airport.getCity())){
                 ans = airport.getAirportName();
+                return ans;
             }
 
         }
-        return ans;
+        return null ;
 
     }
     public int revenue(int flightId){
