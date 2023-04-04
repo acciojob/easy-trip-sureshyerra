@@ -13,6 +13,10 @@ public class Airport {
     public Airport() {
     }
 
+    public Airport(String airportName) {
+        this.airportName = airportName;
+    }
+
     public Airport(String airportName, int noOfTerminals, City city) {
         this.airportName = airportName;
         this.noOfTerminals = noOfTerminals;
