@@ -35,7 +35,7 @@ public class AirportRepository {
             List<Integer> passengers  = ticketDb.get(flightId);
             for(int p : passengers){
                 if (p == passengerId){
-                    return "SUCCESS";
+                    return "FAILURE";
                 }
             }
 
