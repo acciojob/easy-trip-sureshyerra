@@ -26,10 +26,10 @@ public class AirportRepository {
     }
     public String addTicket(int flightId,int passengerId){
         Flight flight = new Flight(flightId);
-        if(ticketDb.containsKey(flightId)) {
-            if (flight.getMaxCapacity() > ticketDb.get(flightId).size()) {
+        if(ticketDb.containsKey(flightId) && (flight.getMaxCapacity() > ticketDb.get(flightId).size())) {
+
                 return "FAILURE";
-            }
+
         }
         else if(ticketDb.containsKey(flightId)){
             List<Integer> passengers  = ticketDb.get(flightId);
@@ -66,10 +66,11 @@ public class AirportRepository {
             for (int p : passengers) {
                 if (p == passengerId) {
                     passengers.remove(passengerId);
+                    return "SUCCESS";
                 }
             }
-            ticketDb.put(flightId, passengers);
-            return "SUCCESS";
+           // ticketDb.put(flightId, passengers);
+
         }
         return "FAILURE";
 
@@ -92,12 +93,15 @@ public class AirportRepository {
         return ans;
     }
     public double distance(City fromcity,City tocity){
-        double min = -1;
-        for (int flightid : ticketDb.keySet()){
-            Flight flight = new Flight(flightid);
+        double min = 1000000000;
+        for (Flight flight : flightDb.values()){
+
             if(flight.getFromCity().equals(fromcity)&& flight.getToCity().equals(tocity)){
                 min =  Math.min(flight.getDuration(),min);
             }
+        }
+        if (min == 1000000000){
+            return -1;
         }
         return min;
     }
@@ -139,12 +143,15 @@ public class AirportRepository {
     }
     public String getAirportName(int flightId){
         String ans = "";
-        Flight flight = new Flight(flightId);
-        for (Airport airport : airportDb.values()){
-            if(flight.getFromCity().equals(airport.getCity())){
+        if (flightDb.containsKey(flightId)){
+            City city = flightDb.get(flightId).getFromCity();
+
+        for (Airport airport : airportDb.values()) {
+            if (city.equals(airport.getCity())) {
                 ans = airport.getAirportName();
                 return ans;
             }
+        }
 
         }
         return null ;
@@ -152,9 +159,8 @@ public class AirportRepository {
     }
     public int revenue(int flightId){
         int noOfPeopleBooked = ticketDb.get(flightId).size();
-        int variableFare = (noOfPeopleBooked*(noOfPeopleBooked+1))*25;
-        int fixedFare = 3000*noOfPeopleBooked;
-        int totalFare = variableFare + fixedFare;
+
+        int totalFare = (25  * noOfPeopleBooked*noOfPeopleBooked)+(2975*noOfPeopleBooked);
 
         return totalFare;
     }
